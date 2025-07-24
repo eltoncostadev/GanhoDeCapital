@@ -1,18 +1,18 @@
-# Calculadora de Ganho de Capital
+# Capital Gains Calculator
 
-Uma aplicação de linha de comando (CLI) que inicialmente calcula o imposto a ser pago sobre lucros ou prejuízos de operações no mercado financeiro de ações, implementada em C# com .NET 8.
+A command-line interface (CLI) application that initially calculates taxes to be paid on profits or losses from stock market trading operations, implemented in C# with .NET 8.
 
-## Decisões Técnicas e Arquiteturais
+## Technical and Architectural Decisions
 
-### Visão Geral da Arquitetura
+### Architecture Overview
 
-A solução foi estruturada seguindo princípios de Clean Architecture e design orientado a domínio (DDD), com uma clara separação de responsabilidades através de camadas bem definidas:
+The solution was structured following Clean Architecture principles and domain-driven design (DDD), with a clear separation of responsibilities through well-defined layers:
 
-1. **Domain Layer**: Contém as entidades de domínio, interfaces e regras de negócio
-2. **Application Layer**: Orquestra o fluxo da aplicação e a execução das regras de negócio
-3. **Infrastructure Layer**: Implementa a entrada/saída e a interação com o usuário
+1. **Domain Layer**: Contains domain entities, interfaces, and business rules
+2. **Application Layer**: Orchestrates application flow and business rule execution
+3. **Infrastructure Layer**: Implements input/output and user interaction
 
-### Principais Componentes
+### Main Components
 
 #### Domain Layer
 - **Entities**: `Operation`, `TaxResult`
@@ -21,80 +21,79 @@ A solução foi estruturada seguindo princípios de Clean Architecture e design ori
 - **Concrete Services**: `PortfolioState`, `StockTaxCalculator`, `StockOperationProcessor`
 
 #### Application Layer
-- **TaxCalculationService**: Serviço principal que processa operações de entrada e produz resultados
-- **Factories**: `StockOperationProcessorFactory`, implementando o Factory Method Pattern
+- **TaxCalculationService**: Main service that processes input operations and produces results
+- **Factories**: `StockOperationProcessorFactory`, implementing the Factory Method Pattern
 
 #### Infrastructure Layer
-- **Program**: Ponto de entrada da aplicação, gerencia I/O e inicializa os serviços
+- **Program**: Application entry point, manages I/O and initializes services
 
-### Padrões de Design Utilizados
+### Design Patterns Used
 
-- **Strategy Pattern**: Diferentes implementações de `ITaxCalculator` para cálculos específicos de impostos
-- **Template Method**: Classes abstratas como `AbstractOperationProcessor` com métodos que podem ser customizados
-- **Factory Method**: `IOperationProcessorFactory` para criar instâncias apropriadas
-- **Dependency Injection**: Para flexibilidade, testabilidade e inversão de controle
+- **Strategy Pattern**: Different implementations of `ITaxCalculator` for specific tax calculations
+- **Template Method**: Abstract classes like `AbstractOperationProcessor` with methods that can be customized
+- **Factory Method**: `IOperationProcessorFactory` to create appropriate instances
+- **Dependency Injection**: For flexibility, testability, and inversion of control
 
-### Extensibilidade
+### Extensibility
 
-A arquitetura foi projetada para ser facilmente extensível:
+The architecture was designed to be easily extensible:
 
-1. **Novos Tipos de Ativos**: Novas implementações de `ITaxCalculator` podem ser criadas para diferentes regras fiscais (ex: criptomoedas, fundos imobiliários)
-2. **Novas Regras de Negócio**: O processamento de operações pode ser estendido através de novas implementações de `IOperationProcessor`
-3. **Mudanças de Requisitos**: Alterações em regras fiscais podem ser isoladas nas classes implementadoras específicas
+1. **New Asset Types**: New implementations of `ITaxCalculator` can be created for different tax rules (e.g., cryptocurrencies, real estate funds)
+2. **New Business Rules**: Operation processing can be extended through new implementations of `IOperationProcessor`
+3. **Requirement Changes**: Changes in tax rules can be isolated in specific implementing classes
 
-### Abordagem de Testes
+### Testing Approach
 
-A solução inclui testes unitários e de integração abrangentes:
+The solution includes comprehensive unit and integration tests:
 
-- **Testes Unitários**: Testam componentes isolados com mock de dependências
-- **Testes de Integração**: Testam o fluxo completo da aplicação, validando todos os casos da especificação
+- **Unit Tests**: Test isolated components with mocked dependencies
+- **Integration Tests**: Test the complete application flow, validating all specification cases
 
-## Compilação e Execução
+## Compilation and Execution
 
-### Pré-requisitos
+### Prerequisites
 
-- .NET 8 SDK instalado
-- Sistema operacional: Windows, Linux ou macOS
+- .NET 8 SDK installed
+- Operating system: Windows, Linux, or macOS
 
-### Compilação
+### Compilation
 
-# Compilar o projeto
+# Compile the project
 ```bash
 dotnet build
 ```
 
-### Execução | Exemplos de Uso
+### Execution | Usage Examples
 
 ```bash
 dotnet run --project GanhoCapital
 ```
 
-### E inserir manualmente as operações
+### And manually input the operations
 ```bash
 [{"operation":"buy", "unit-cost":10.00, "quantity": 100},{"operation":"sell", "unit-cost":15.00, "quantity": 50},{"operation":"sell", "unit-cost":15.00, "quantity": 50}]
 [{"operation":"buy", "unit-cost":10.00, "quantity": 10000},{"operation":"sell", "unit-cost":20.00, "quantity": 5000},{"operation":"sell", "unit-cost":5.00, "quantity": 5000}]
 ```
 
+## Running Tests
 
-## Executando os Testes
-
-### Executar Todos os Testes
+### Execute All Tests
 
 ```bash
 dotnet test .\GanhoCapitalTests\GanhoCapitalTests.csproj
 ```
 
-## Notas Adicionais
+## Additional Notes
 
-### Formato de Entrada/Saída
+### Input/Output Format
 
-- **Entrada**: Listas de operações em formato JSON, uma lista por linha
-- **Saída**: Listas de resultados de impostos em formato JSON, uma lista por linha
+- **Input**: Lists of operations in JSON format, one list per line
+- **Output**: Lists of tax results in JSON format, one list per line
 
-### Precisão Decimal
+### Decimal Precision
 
-A solução utiliza o tipo `decimal` para cálculos financeiros, garantindo precisão em operações monetárias, e arredonda valores para duas casas decimais conforme a especificação.
+The solution uses the `decimal` type for financial calculations, ensuring precision in monetary operations, and rounds values to two decimal places according to the specification.
 
-### Tratamento de Erros
+### Error Handling
 
-Embora a especificação assuma entradas sem erros, a aplicação implementa validações básicas para operações inconsistentes, como tentar vender mais ações do que se possui.
+Although the specification assumes error-free inputs, the application implements basic validations for inconsistent operations, such as trying to sell more shares than owned.
